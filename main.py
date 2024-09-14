@@ -19,7 +19,9 @@ st.write("2. Replace Yes and No to 1 and 0 respectively, incase of null value po
 # Replace 'Yes' and 'No' with 1 and 0 respectively
 df_without_email.replace({'Yes': 1, 'No': 0}, inplace=True)
 # calculate median of each column
-medians = df_without_email.median()
+# medians = df_without_email.median()
+medians = df_without_email.select_dtypes(include='number').median()
+
 # replace NaN values with median of respective column
 preprocessed_df = df_without_email.fillna(medians)
 st.write(preprocessed_df)
@@ -43,7 +45,8 @@ st.text("3. Mean values before normalization:")
 st.write(mean_values)
 
 # Normalize risk factor weights to ensure the sum is 100%
-normalized_weights = preprocessed_df[risk_factor_columns] / preprocessed_df[risk_factor_columns].sum(axis=1)[:, None] * 100
+normalized_weights = preprocessed_df[risk_factor_columns].to_numpy() / preprocessed_df[risk_factor_columns].sum(axis=1).to_numpy()[:, None] * 100
+# normalized_weights = preprocessed_df[risk_factor_columns] / preprocessed_df[risk_factor_columns].sum(axis=1)[:, None] * 100
 
 # Display normalized weights
 # print("\nNormalized Risk Factor Weights:")
